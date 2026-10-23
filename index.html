@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>មហាផែនការជួញដូរ ៦ឆ្នាំ ($10 ទៅ $500M)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kantumruy Pro', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .glass { background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        @media print {
+            body { background-color: #ffffff; color: #000000; }
+            .no-print { display: none !important; }
+            .glass { border: 1px solid #ccc; background: #fff; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        <!-- Header -->
+        <div class="glass rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-4 border-l-4 border-emerald-500">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-emerald-400">មហាផែនការជួញដូរ ៦ឆ្នាំ ($10 ➔ $500,000,000)</h1>
+                <p class="text-slate-400 text-sm mt-1">ប្រព័ន្ធតាមដានវិន័យប្រចាំថ្ងៃ និងគណនាហានិភ័យស្វ័យប្រវត្តិ (Compounding & Risk Engine)</p>
+            </div>
+            <div class="flex gap-2 no-print">
+                <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-semibold transition">🖨️ បោះពុម្ពតារាង (Print)</button>
+                <button onclick="resetProgress()" class="bg-rose-900/60 hover:bg-rose-800 text-rose-200 px-4 py-2 rounded-lg text-sm font-semibold transition">🔄 កំណត់ឡើងវិញ</button>
+            </div>
+        </div>
+
+        <!-- Year Selector & Lot Calculator -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Year Selector -->
+            <div class="glass rounded-2xl p-6 lg:col-span-2 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg font-bold text-amber-400">១. ជ្រើសរើសឆ្នាំ និងខែអនុវត្តផែនការ</h2>
+                    <span id="progressBadge" class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full font-semibold">សម្រេចបាន: 0/21 ថ្ងៃ</span>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 no-print" id="yearButtons">
+                    <!-- Dynamic Year Buttons -->
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <div class="text-xs text-slate-400">ដើមទុនចាប់ផ្តើមឆ្នាំ</div>
+                        <div id="statStart" class="text-lg font-bold text-white mt-1">$10</div>
+                    </div>
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <div class="text-xs text-slate-400">គោលដៅចុងឆ្នាំ</div>
+                        <div id="statEnd" class="text-lg font-bold text-emerald-400 mt-1">$10,000</div>
+                    </div>
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <div class="text-xs text-slate-400">គោលដៅប្រចាំថ្ងៃ</div>
+                        <div id="statDaily" class="text-lg font-bold text-amber-400 mt-1">2.80%</div>
+                    </div>
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <div class="text-xs text-slate-400">ហានិភ័យក្នុង ១ Trade</div>
+                        <div id="statRisk" class="text-lg font-bold text-rose-400 mt-1">2.0%</div>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex flex-wrap items-center gap-3 no-print">
+                    <label class="text-sm text-slate-300 font-semibold">ជ្រើសរើសខែ (១-១២):</label>
+                    <select id="monthSelect" onchange="renderTable()" class="bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        <option value="1">ខែទី ១ (ថ្ងៃទី 1 - 21)</option>
+                        <option value="2">ខែទី ២ (ថ្ងៃទី 22 - 42)</option>
+                        <option value="3">ខែទី ៣ (ថ្ងៃទី 43 - 63)</option>
+                        <option value="4">ខែទី ៤ (ថ្ងៃទី 64 - 84)</option>
+                        <option value="5">ខែទី ៥ (ថ្ងៃទី 85 - 105)</option>
+                        <option value="6">ខែទី ៦ (ថ្ងៃទី 106 - 126)</option>
+                        <option value="7">ខែទី ៧ (ថ្ងៃទី 127 - 147)</option>
+                        <option value="8">ខែទី ៨ (ថ្ងៃទី 148 - 168)</option>
+                        <option value="9">ខែទី ៩ (ថ្ងៃទី 169 - 189)</option>
+                        <option value="10">ខែទី ១០ (ថ្ងៃទី 190 - 210)</option>
+                        <option value="11">ខែទី ១១ (ថ្ងៃទី 211 - 231)</option>
+                        <option value="12">ខែទី ១២ (ថ្ងៃទី 232 - 252)</option>
+                    </select>
+                    <span id="unitNotice" class="text-xs text-amber-300 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/20">💡 ខែទី ១-៨ បង្ហាញជា USC (Cent Account: $1 = 100 USC)</span>
+                </div>
+            </div>
+
+            <!-- Quick Lot Size Calculator -->
+            <div class="glass rounded-2xl p-6 space-y-4 no-print">
+                <h2 class="text-lg font-bold text-sky-400">២. ម៉ាស៊ីនគណនា Lot Size ភ្លាមៗ</h2>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <label class="block text-slate-400 mb-1">ដើមទុនបច្ចុប្បន្ន (USC ឬ USD)</label>
+                        <input type="number" id="calcBalance" value="1000" oninput="calculateLot()" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-slate-400 mb-1">ហានិភ័យ (Risk %)</label>
+                            <input type="number" id="calcRisk" value="2" step="0.1" oninput="calculateLot()" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Stop Loss (Pips)</label>
+                            <input type="number" id="calcSL" value="25" oninput="calculateLot()" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white">
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/90 p-4 rounded-xl border border-sky-500/30 space-y-2 mt-2">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">ទឹកប្រាក់ប្រថុយ (Risk):</span>
+                            <span id="resRiskAmt" class="font-bold text-rose-400">20.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">គោលដៅ TP (1:2 R:R):</span>
+                            <span id="resTPAmt" class="font-bold text-emerald-400">+40.00 (50 Pips)</span>
+                        </div>
+                        <div class="flex justify-between border-t border-slate-700 pt-2">
+                            <span class="text-slate-200 font-semibold">ទំហំ Lot ត្រូវប្រើ:</span>
+                            <span id="resLot" class="text-xl font-bold text-sky-400">0.08 Lot</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Compounding Table -->
+        <div class="glass rounded-2xl p-6 overflow-x-auto">
+            <h2 id="tableTitle" class="text-lg font-bold text-emerald-400 mb-4">តារាងតាមដានប្រចាំថ្ងៃ - ឆ្នាំទី ១ (ខែទី ១)</h2>
+            <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                    <tr class="border-b border-slate-700 text-slate-400 bg-slate-800/50">
+                        <th class="py-3 px-4">ថ្ងៃទី</th>
+                        <th class="py-3 px-4">ដើមទុនចាប់ផ្តើម</th>
+                        <th class="py-3 px-4">គោលដៅប្រចាំថ្ងៃ</th>
+                        <th class="py-3 px-4">ដើមទុនចុងថ្ងៃ</th>
+                        <th class="py-3 px-4">ហានិភ័យ ១ Trade</th>
+                        <th class="py-3 px-4">Lot ណែនាំ (SL 25p)</th>
+                        <th class="py-3 px-4 text-center">សម្រេចគោលដៅ</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody" class="divide-y divide-slate-800">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const plans = [
+            { year: 1, title: "ឆ្នាំទី ១: $10 ➔ $10K", startUSD: 10, endUSD: 10000, dailyRate: 0.0278, riskPct: 2.0 },
+            { year: 2, title: "ឆ្នាំទី ២: $10K ➔ $1M", startUSD: 10000, endUSD: 1000000, dailyRate: 0.01843, riskPct: 1.0 },
+            { year: 3, title: "ឆ្នាំទី ៣: $1M ➔ $10M", startUSD: 1000000, endUSD: 10000000, dailyRate: 0.00918, riskPct: 0.5 },
+            { year: 4, title: "ឆ្នាំទី ៤: $10M ➔ $50M", startUSD: 10000000, endUSD: 50000000, dailyRate: 0.00641, riskPct: 0.3 },
+            { year: 5, title: "ឆ្នាំទី ៥: $50M ➔ $100M", startUSD: 50000000, endUSD: 100000000, dailyRate: 0.00275, riskPct: 0.2 },
+            { year: 6, title: "ឆ្នាំទី ៦: $100M ➔ $500M", startUSD: 100000000, endUSD: 500000000, dailyRate: 0.00641, riskPct: 0.25 }
+        ];
+
+        let currentYear = 1;
+        let completedDays = JSON.parse(localStorage.getItem('tradingPlan6Y_checks') || '{}');
+
+        function init() {
+            const btnContainer = document.getElementById('yearButtons');
+            btnContainer.innerHTML = '';
+            plans.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = `p-2.5 rounded-xl font-semibold text-xs md:text-sm border transition ${p.year === currentYear ? 'bg-emerald-600 border-emerald-400 text-white shadow-lg' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'}`;
+                btn.innerText = p.title;
+                btn.onclick = () => { currentYear = p.year; init(); };
+                btnContainer.appendChild(btn);
+            });
+            renderTable();
+            calculateLot();
+        }
+
+        function formatMoney(amount, useUSC) {
+            if (useUSC) {
+                return Math.round(amount * 100).toLocaleString() + ' USC';
+            }
+            return '$' + amount.toLocaleString(undefined, { minimumFractionDigits: amount < 100 ? 2 : 0, maximumFractionDigits: amount < 100 ? 2 : 0 });
+        }
+
+        function renderTable() {
+            const plan = plans.find(p => p.year === currentYear);
+            const month = parseInt(document.getElementById('monthSelect').value);
+            
+            document.getElementById('statStart').innerText = '$' + plan.startUSD.toLocaleString();
+            document.getElementById('statEnd').innerText = '$' + plan.endUSD.toLocaleString();
+            document.getElementById('statDaily').innerText = (plan.dailyRate * 100).toFixed(2) + '%';
+            document.getElementById('statRisk').innerText = plan.riskPct + '%';
+
+            const useUSC = (currentYear === 1 && month <= 8);
+            document.getElementById('unitNotice').style.display = (currentYear === 1) ? 'inline-block' : 'none';
+            document.getElementById('tableTitle').innerText = `តារាងតាមដានប្រចាំថ្ងៃ - ${plan.title} (ខែទី ${month})`;
+
+            const startDay = (month - 1) * 21 + 1;
+            const endDay = month * 21;
+            let balance = plan.startUSD * Math.pow(1 + plan.dailyRate, startDay - 1);
+
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            let checkedCount = 0;
+
+            for (let d = startDay; d <= endDay; d++) {
+                const profit = balance * plan.dailyRate;
+                const endBalance = balance + profit;
+                const riskAmt = balance * (plan.riskPct / 100);
+                
+                // Calculate Recommended Lot (Assuming 25 pips SL)
+                const displayBalance = useUSC ? balance * 100 : balance;
+                const displayRisk = displayBalance * (plan.riskPct / 100);
+                let recLot = displayRisk / (25 * 10);
+                recLot = Math.max(0.01, Math.round(recLot * 100) / 100);
+
+                const checkKey = `Y${currentYear}_D${d}`;
+                const isChecked = completedDays[checkKey] ? true : false;
+                if (isChecked) checkedCount++;
+
+                const tr = document.createElement('tr');
+                tr.className = isChecked ? 'bg-emerald-900/20 text-emerald-200' : 'hover:bg-slate-800/40';
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-semibold">ថ្ងៃទី ${d}</td>
+                    <td class="py-3 px-4">${formatMoney(balance, useUSC)}</td>
+                    <td class="py-3 px-4 text-emerald-400 font-semibold">+${formatMoney(profit, useUSC)}</td>
+                    <td class="py-3 px-4 font-bold text-white">${formatMoney(endBalance, useUSC)}</td>
+                    <td class="py-3 px-4 text-rose-400">${formatMoney(riskAmt, useUSC)}</td>
+                    <td class="py-3 px-4 text-sky-300 font-mono">${recLot.toFixed(2)} ${useUSC ? 'Cent' : 'Std'}</td>
+                    <td class="py-3 px-4 text-center">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleDay('${checkKey}', ${useUSC ? Math.round(endBalance*100) : Math.round(endBalance)})" class="w-5 h-5 accent-emerald-500 rounded cursor-pointer">
+                    </td>
+                `;
+                tbody.appendChild(tr);
+                balance = endBalance;
+            }
+            document.getElementById('progressBadge').innerText = `សម្រេចបាន: ${checkedCount}/21 ថ្ងៃក្នុងខែនេះ`;
+        }
+
+        function toggleDay(key, newBal) {
+            completedDays[key] = !completedDays[key];
+            localStorage.setItem('tradingPlan6Y_checks', JSON.stringify(completedDays));
+            if (completedDays[key]) {
+                document.getElementById('calcBalance').value = newBal;
+                calculateLot();
+            }
+            renderTable();
+        }
+
+        function calculateLot() {
+            const bal = parseFloat(document.getElementById('calcBalance').value) || 0;
+            const riskPct = parseFloat(document.getElementById('calcRisk').value) || 0;
+            const sl = parseFloat(document.getElementById('calcSL').value) || 1;
+
+            const riskAmt = bal * (riskPct / 100);
+            const tpAmt = riskAmt * 2;
+            const lot = Math.max(0.01, riskAmt / (sl * 10));
+
+            document.getElementById('resRiskAmt').innerText = riskAmt.toLocaleString(undefined, {maximumFractionDigits: 2});
+            document.getElementById('resTPAmt').innerText = `+${tpAmt.toLocaleString(undefined, {maximumFractionDigits: 2})} (${sl*2} Pips)`;
+            document.getElementById('resLot').innerText = lot.toFixed(2) + ' Lot';
+        }
+
+        function resetProgress() {
+            if (confirm('តើអ្នកពិតជាចង់លុបការកត់ត្រាថ្ងៃជួញដូរទាំងអស់មែនទេ?')) {
+                completedDays = {};
+                localStorage.removeItem('tradingPlan6Y_checks');
+                renderTable();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
